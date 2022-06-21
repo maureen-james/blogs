@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render,redirect
 from .models import Profile,Blog
-from .forms import DetailsForm,PostForm
+from .forms import DetailsForm,BlogPostForm
 
 # Create your views here.
 def welcome(request):
@@ -15,7 +15,7 @@ def profile(request):
 
     if request.method == 'POST':
         form = DetailsForm(request.POST, request.FILES)
-        form1 = PostForm(request.POST, request.FILES)
+        form1 = BlogPostForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save(commit=False)
             profile.user = current_user
@@ -30,7 +30,7 @@ def profile(request):
 
     else:
         form = DetailsForm()
-        form1 = PostForm()
+        form1 = BlogPostForm()
     
     return render(request, 'profile.html', {"form":form,"form1":form1})
 

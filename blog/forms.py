@@ -1,4 +1,4 @@
-from .models import Profile
+from .models import Profile,Blog
 from django import forms
 
 class DetailsForm(forms.ModelForm):
@@ -6,7 +6,7 @@ class DetailsForm(forms.ModelForm):
         model = Profile
         exclude = ['user']
 
-# class PostForm(forms.ModelForm):
-#     class Meta:
-#         model = Post
-#         exclude = ['profile','date','like']
+class BlogPostForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        exclude = ['profile','date','like']
