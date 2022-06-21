@@ -16,7 +16,7 @@ class Blog(models.Model):
     description=models.CharField(max_length=100)
     url = models.TextField()
     posted_date = models.DateTimeField(auto_now_add=True)
-    rate = models.IntegerField(default=0)
+    
 
     @classmethod
     def get_project_by_user(cls, user):
@@ -39,7 +39,7 @@ class Blog(models.Model):
     @classmethod
     def search_by_title(self, search_title):
         
-        projects = Project.objects.filter(title__icontains=search_title)
+        projects = Blog.objects.filter(title__icontains=search_title)
         return projects
   
 
