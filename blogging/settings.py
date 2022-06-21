@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'blog',
     'bootstrap4',
     'cloudinary',
+    'registration',
 
 ]
 
