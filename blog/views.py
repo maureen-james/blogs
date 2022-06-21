@@ -2,13 +2,15 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render,redirect
 from .models import Profile,Blog
-from .forms import CommentForm, DetailsForm,PostForm
+from .forms import DetailsForm,PostForm
 
 # Create your views here.
+def welcome(request):
+    return render(request, 'welcome.html')
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
-    posts=Post.objects.all()
+    # posts=Post.objects.all()
     current_user = request.user
 
     if request.method == 'POST':
@@ -30,5 +32,5 @@ def profile(request):
         form = DetailsForm()
         form1 = PostForm()
     
-    return render(request, 'profile.html', {"form":form,"form1":form1,"posts":posts,"followingcount":followingcount,"followercount":followercount})
+    return render(request, 'profile.html', {"form":form,"form1":form1})
 
