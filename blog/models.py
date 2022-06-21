@@ -47,3 +47,12 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.user.username  
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_pic = CloudinaryField('image')
+    bio = models.CharField(max_length = 255)
+
+    def __str__(self):
+        return f'{self.user.username}'
