@@ -7,44 +7,12 @@
             <img src="{{profile_user.profile.profile_pic.url}}" alt="" id="profilepic" class="img-fluid">
             <h3 style="margin-top:7%;letter-spacing:5px;font:bold;font-size: 50px;">{{profile_user.username}}</h3>
         </div>
-        <div class="col-sm-1 col-md-2" style="margin-top: 7%;">
-            <p>FOLLOWING</p>
-            <p>{{followingcount}}</p>
-        </div>
-        <div class="col-sm-1 col-md-2" style="margin-top: 7%;">
-            <p>FOLLOWERS</p>
-            <p>{{followercount}}</p>
-        </div>
-        <div class="col-sm-1 col-md-2" style="margin-top: 7%;">
-            <button type="button" class="btn-lg btn-outline-success">FOLLOW</button>
-
-        </div>
-
-        <div class="col-sm-3 col-md-3" style="margin-top: 7%;">
-            <button type="button" class="btn-lg btn-outline-info">MESSAGE</button>
-        </div>
         
     </div>
     <div style="margin-top:1%;">
         <p>{{profile_user.profile.bio}}</p>
     </div>
-    <div class="row" id="stories">
-        <div class="col-sm-2 col-md-3">
-            <div id="story">
-            </div>
-            <h4 style="margin-top:5%;font:bold;font-size: 20px;">Stories</h4>
-        </div>
-        <div class="col-sm-2 col-md-3">
-            <div id="story">
-            </div>
-            <h4 style="margin-top:5%;font:bold;font-size: 20px;">coming</h4>
-        </div>
-        <div class="col-sm-2 col-md-3">
-            <div id="story">
-            </div>
-            <h4 style="margin-top:5%;font:bold;font-size: 20px;">soon!</h4>
-        </div>
-    </div>
+
     <div class="nav navbar-nav" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -61,7 +29,7 @@
                         <i class="fab fa-instagram"></i>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{%url 'timeline' %}">
+                       
                             <i class="fas fa-th"></i> Posts</a>
                     </li>
                     <li class="nav-item">
@@ -83,4 +51,42 @@
             {% endfor %}
         </div>
 </div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-lg-2"></div>
+        <div class="col-md-8 col-lg-8 col-sm-10">
+            <div class="card  mt-3">
+                <!-- new conatiner -->
+                <div class="container-fluid" >
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-xs-12 ml-2 mt-2 " style="margin-top: 2%;">
+                            <img src="{{user.user.image.url}}" class="img-circle rounded-circle image-fluid" alt="Unable to load" style="width: 220px; height: 220px;">
+                        </div>
+                    
+                        <div class="col-lg-6 col-md-6 col-xs-12 mb-2">
+                            <h2 class="card-title">{{user.username}}</h2>
+                            <p class="card-text">Email Adress: {{user.email}}</p>  
+                            {% if user.user.name%}
+                            <p class="card-text">Name: {{user.user.name}}</p>
+                            {%endif%}                 
+                            <a href="{% url  'edit_profile' %}" class="btn btn-success btn-sm">Update Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-lg-2"></div>
+    </div>
+    <legend class="text-center">POSTS BY USER</legend>
+    <div class="row mt-3">
+        <div class="col-lg-12 col-md-12" >
+            <div class="row">
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
