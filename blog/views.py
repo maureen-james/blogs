@@ -6,6 +6,10 @@ from .forms import DetailsForm,AddBlogForm
 from django.http  import HttpResponse,Http404
 from django.contrib.auth.models import User
 from django.contrib import messages
+from blog.permissions import IsAdminOrReadOnly
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializer import BlogSerializer
 
 # Create your views here.
 def welcome(request):
@@ -116,6 +120,15 @@ def blog_details(request, blog_id):
     raise Http404
   
   return render(request, 'blog_details.html', {"details":blog_details})
+
+
+
+class BlogList(APIView):
+    def get(self, request, format=None):
+        all_projects = Blog.objects.all()
+        serializers = BlogSerializer(all_projects, many=True)
+        permission_classes = (IsAdminOrReadOnly,)
+        return Response(serializers.data)  
 
 
 
