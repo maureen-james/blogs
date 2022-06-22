@@ -34,3 +34,21 @@ def profile(request):
     
     return render(request, 'profile.html', {"form":form,"form1":form1})
 
+@login_required(login_url='/accounts/login/')
+def edit_profile(request):
+    current_user = request.user
+    if request.method == 'POST':
+        form = DetailsForm(request.POST, request.FILES)
+        if form.is_valid():
+                Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
+                profile = Profile.objects.filter(id=current_user.profile.id).first()
+                profile.profile_pic.delete()
+                profile.profile_pic=form.cleaned_data["profile_pic"]
+                profile.save()
+        return redirect('profile')
+
+    else:
+        form = DetailsForm()
+    
+    return render(request, 'edit_profile.html',{"form": form})   
+
