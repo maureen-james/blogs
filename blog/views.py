@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render,redirect
 from .models import Profile,Blog
-from .forms import DetailsForm,BlogPostForm
+from .forms import DetailsForm,BlogPostForm,AddBlogForm
+from django.http  import HttpResponse,Http404
 
 # Create your views here.
 def welcome(request):
@@ -69,5 +70,30 @@ def search_business(request):
     else:
         message = "You haven't searched for any term"
         return render(request, 'search.html', {"message": message})
+
+@login_required(login_url='/accounts/login/')
+def add_project(request):
+    if request.method == "POST":
+        form = AddBlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            form.instance.user = request.user
+            project.save()
+        return redirect('welcome')
+    else:
+        form = BlogPostForm()
+    return render(request, 'add_project.html', {"form": form})
+
+@login_required(login_url='/accounts/login/')
+def project_details(request, project_id):
+  
+  
+  try:
+    project_details = Blog.objects.get(pk = project_id)
+  
+  except Blog.DoesNotExist:
+    raise Http404
+  
+  return render(request, 'project_details.html', {"details":project_details})
 
 

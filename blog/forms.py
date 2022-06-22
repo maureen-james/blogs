@@ -10,3 +10,9 @@ class BlogPostForm(forms.ModelForm):
     class Meta:
         model = Blog
         exclude = ['profile','date','like']
+
+class AddBlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = ['title','description','image']
+            
