@@ -31,7 +31,7 @@ def profile(request):
     # current_user=get_object_or_404(User,id=user_id)
     current_user = request.user
     blog = Blog.objects.filter(user=current_user)
-    profile = Profile.objects.filter(id = current_user.id).first()
+    profile = Profile.objects.filter(user = current_user).first()
     form=AddBlogForm()
     
     return render(request, 'profile.html', {"blog": blog,'form':form, "profile": profile})
@@ -63,16 +63,15 @@ def edit_profile(request):
         if form.is_valid():
                 Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
                 profile = Profile.objects.filter(id=current_user.profile.id).first()
-                profile.profile_photo.delete()
+                # profile.profile_photo.delete()
                 profile.profile_photo=form.cleaned_data["profile_photo"]
-
                 profile.save()
         return redirect('profile')
 
     else:
         form = DetailsForm()
     
-    return render(request, 'update_profile.html',{"form": form})
+    return render(request, 'edit_profile.html',{"form": form})
 
 
 
@@ -98,9 +97,9 @@ def add_blog(request):
     if request.method == "POST":
         form = AddBlogForm(request.POST, request.FILES)
         if form.is_valid():
-            project = form.save(commit=False)
+            blog = form.save(commit=False)
             form.instance.user = request.user
-            project.save()
+            blog.save()
         return redirect('welcome')
     else:
         form = AddBlogForm()
