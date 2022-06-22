@@ -72,7 +72,7 @@ def search_business(request):
         return render(request, 'search.html', {"message": message})
 
 @login_required(login_url='/accounts/login/')
-def add_project(request):
+def add_blog(request):
     if request.method == "POST":
         form = AddBlogForm(request.POST, request.FILES)
         if form.is_valid():
@@ -82,18 +82,19 @@ def add_project(request):
         return redirect('welcome')
     else:
         form = BlogPostForm()
-    return render(request, 'add_project.html', {"form": form})
+    return render(request, 'add_blog.html', {"form": form})
 
 @login_required(login_url='/accounts/login/')
-def project_details(request, project_id):
+def blog_details(request, blog_id):
   
   
   try:
-    project_details = Blog.objects.get(pk = project_id)
+    project_details = Blog.objects.get(pk = blog_id)
   
   except Blog.DoesNotExist:
     raise Http404
   
-  return render(request, 'project_details.html', {"details":project_details})
+  return render(request, 'blog_details.html', {"details":project_details})
+
 
 
