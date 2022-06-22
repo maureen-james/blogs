@@ -2,40 +2,60 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render,redirect
 from .models import Profile,Blog
-from .forms import DetailsForm,BlogPostForm,AddBlogForm
+from .forms import DetailsForm,AddBlogForm
 from django.http  import HttpResponse,Http404
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 # Create your views here.
 def welcome(request):
-    return render(request, 'welcome.html')
+    blog=Blog.objects.all()
+    if request.method=='POST':
+        current_user=request.user
+        form=AddBlogForm(request.POST,request.FILES)
+        if form.is_valid():
+            blog=form.save(commit=False)
+            blog.user=current_user
+            blog.save()
+            messages.success(request,('blog was posted successfully!'))
+            return redirect('welcome')
+    else:
+            form=AddBlogForm()
+    return render(request,'welcome.html',{'form':form,'blog':blog})
+
+    # return render(request, 'welcome.html')
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
-    # posts=Post.objects.all()
+
+    # current_user=get_object_or_404(User,id=user_id)
     current_user = request.user
-
-    if request.method == 'POST':
-        form = DetailsForm(request.POST, request.FILES)
-        form1 = BlogPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            profile = form.save(commit=False)
-            profile.user = current_user
-            profile.save()
-
-        if form1.is_valid():
-            post = form1.save(commit=False)
-            post.profile = current_user.profile
-            post.save()
-
-        return redirect('profile')
-
-    else:
-        form = DetailsForm()
-        form1 = BlogPostForm()
+    blog = Blog.objects.filter(user=current_user)
+    profile = Profile.objects.filter(id = current_user.id).first()
+    form=AddBlogForm()
     
-    return render(request, 'profile.html', {"form":form,"form1":form1})
+    return render(request, 'profile.html', {"blog": blog,'form':form, "profile": profile})
 
-@login_required(login_url='/accounts/login/')
+
+
+
+# @login_required(login_url='/accounts/login/')
+# def edit_profile(request):
+#     current_user = request.user
+#     if request.method == 'POST':
+#         form = DetailsForm(request.POST, request.FILES)
+#         if form.is_valid():
+#                 Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
+#                 profile = Profile.objects.filter(id=current_user.profile.id).first()
+#                 profile.profile_pic.delete()
+#                 profile.profile_pic=form.cleaned_data["profile_pic"]
+#                 profile.save()
+#         return redirect('profile')
+
+#     else:
+#         form = DetailsForm()
+    
+#     return render(request, 'edit_profile.html',{"form": form}) 
 def edit_profile(request):
     current_user = request.user
     if request.method == 'POST':
@@ -43,29 +63,31 @@ def edit_profile(request):
         if form.is_valid():
                 Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
                 profile = Profile.objects.filter(id=current_user.profile.id).first()
-                profile.profile_pic.delete()
-                profile.profile_pic=form.cleaned_data["profile_pic"]
+                profile.profile_photo.delete()
+                profile.profile_photo=form.cleaned_data["profile_photo"]
+
                 profile.save()
         return redirect('profile')
 
     else:
         form = DetailsForm()
     
-    return render(request, 'edit_profile.html',{"form": form}) 
+    return render(request, 'update_profile.html',{"form": form})
+
 
 
 @login_required
-def search_business(request):
+def search_blog(request):
     """
     Function that searches for projects
     """
-    if 'business' in request.GET and request.GET["business"]:
+    if 'blog' in request.GET and request.GET["blog"]:
         search_term = request.GET.get("business")
-        # searched_business = Business.objects.filter(name__icontains=search_term)
+        searched_blog = Blog.objects.filter(name__icontains=search_term)
         message = f"{search_term}"
-        # businesses = Business.objects.all()
+        blog = Blog.objects.all()
         
-        return render(request, 'search.html', {"message": message})
+        return render(request, 'search.html', {"message": message, "businesses": searched_blog})
 
     else:
         message = "You haven't searched for any term"
@@ -81,7 +103,7 @@ def add_blog(request):
             project.save()
         return redirect('welcome')
     else:
-        form = BlogPostForm()
+        form = AddBlogForm()
     return render(request, 'add_blog.html', {"form": form})
 
 @login_required(login_url='/accounts/login/')
@@ -89,12 +111,12 @@ def blog_details(request, blog_id):
   
   
   try:
-    project_details = Blog.objects.get(pk = blog_id)
+    blog_details = Blog.objects.get(pk = blog_id)
   
   except Blog.DoesNotExist:
     raise Http404
   
-  return render(request, 'blog_details.html', {"details":project_details})
+  return render(request, 'blog_details.html', {"details":blog_details})
 
 
 
