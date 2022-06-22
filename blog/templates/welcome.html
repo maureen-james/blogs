@@ -41,8 +41,36 @@
     <div class="container">
         <div class="row">
             <div class="col m12">
-                <h2 style="text-align: center; border-bottom: black solid 1px; color: white">{{profile.neighbourhood}} neighbourhood Posts</h2>
+                <h2 style="text-align: center; border-bottom: black solid 1px; color: white">BLOGS</h2>
+                <!-- <h2 style="text-align: center; border-bottom: black solid 1px; color: white">{{profile.neighbourhood}} BLOGS</h2> -->
             </div>
+        </div>
+
+        <div class="row mt-5">
+            <h5 style="text-align: center;color:darkblue;">PROJECTS PORTAL</h5>
+            {% if projects %}
+            {% for project in projects %}
+            <div class="col-md-6">
+                <a href="{% url 'projectdetails' project_id=project.id%}" class="thumbnail">
+                    <div class="card">
+                        <div class="card-header">
+                            <p><b>{{project.title}}</b></p>
+                        </div>
+                        <div class="card-body">
+                            <img src="{{project.image.url}}" class="img-fluid" style="width: 100%;height: 300px;"
+                                alt="Project Display Screenshot">
+                        </div>
+                    </div>
+    
+                </a>
+            </div>
+            {% endfor %}
+            {%else %}
+            <p>There are no Projects to show</p>
+            {% endif %}
+    
+            <div class="col-md-6"></div>
+    
         </div>
             {% for post in posts %}
                 <div class="row">

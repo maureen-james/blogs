@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-3 col-md-5">
             <img src="{{user.profile.profile_pic.url}}" alt="" id="profilepic" class="img-fluid">
-            <form  action="{%url 'edit'%}" method="post" enctype="multipart/form-data" style="margin-top:10%;">
+            <form  action="{%url 'edit_profile'%}" method="post" enctype="multipart/form-data" style="margin-top:10%;">
                   {% csrf_token %}
               
                   {% bootstrap_form form layout='inline'%}
