@@ -19,7 +19,7 @@
       <nav class="navbar fixed-top" style="background-color: rgb(10, 9, 9);">
         <div class="container-fluid">
           <div class="navbar-header">
-            <a class="navbar-brand" href="{% url 'index' %}">NEIGHBOURHOOD</a>
+            <a class="navbar-brand" href="{% url 'welcome' %}">NEIGHBOURHOOD</a>
             
               <a  href="/user/">Profile</a>
             
@@ -36,8 +36,7 @@
               <a  href="/accounts/register/">Sign up</a>
             
             {% endif %}
-            <a href="{% url 'business' %}">Businesses Around ~</a>
-            <a href="{% url 'contacts' %}" class="modal-trigger">Emergency Contacts</a>
+
           </div>
           <!-- Adding a search form  -->
           <div class="col-sm-2 col-md-2 navbar-right">
@@ -57,7 +56,7 @@
           <a class="right" href="{% url 'edit_profile' %}" style="margin: 10px;">
            
           <a style="color: black; padding-left: 15px; " href="/logout"><i class="fa fa-sign-out" style="font-size:24px; color: white;"></i></a>
-          <div class="item has-tablet" id="bt-submit"><a href="{% url 'post' %}" class="button"><span>POST</span></a></div>
+         
         </div>
       </nav>
   </div>

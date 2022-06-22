@@ -50,5 +50,24 @@ def edit_profile(request):
     else:
         form = DetailsForm()
     
-    return render(request, 'edit_profile.html',{"form": form})   
+    return render(request, 'edit_profile.html',{"form": form}) 
+
+
+@login_required
+def search_business(request):
+    """
+    Function that searches for projects
+    """
+    if 'business' in request.GET and request.GET["business"]:
+        search_term = request.GET.get("business")
+        # searched_business = Business.objects.filter(name__icontains=search_term)
+        message = f"{search_term}"
+        # businesses = Business.objects.all()
+        
+        return render(request, 'search.html', {"message": message})
+
+    else:
+        message = "You haven't searched for any term"
+        return render(request, 'search.html', {"message": message})
+
 
