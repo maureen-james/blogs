@@ -36,12 +36,20 @@
     <div class="row" id="posts">
         <p><b> YOUR BLOGS</b></p>
 
-        {%for project in projects%}
-        <div class="col-md-6">
+        {%for blog in blogs %}
+        <!-- <div class="col-md-6">
             <img src="{{blog.image.url}}" alt="" width="100%" height="200px" class="img-responsive">
+        </div> -->
+        <div class="card-header">
+            <h5>{{blog.title}}</h5>
         </div>
+        <div class="card-body">
+            <img src="{{blog.image.url}}" class="img-fluid"
+            alt="Project Display Screenshot">
+          <p class="card-text">{{blog.content}}</p>
         {%endfor%}
-        <div class="col-md-6"></div>
     </div>
 </div>
+</div>
+
 {%endblock%}

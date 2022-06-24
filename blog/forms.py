@@ -1,4 +1,4 @@
-from .models import Profile,Blog
+from .models import Profile,Blog,Comment
 from django import forms
 
 class DetailsForm(forms.ModelForm):
@@ -14,5 +14,9 @@ class DetailsForm(forms.ModelForm):
 class AddBlogForm(forms.ModelForm):
     class Meta:
         model = Blog
-        fields = ['title','content','image']
+        fields = ['title','category','content','description','image','url']
             
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('comment',)            

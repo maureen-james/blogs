@@ -10,17 +10,29 @@
   <div class="row">
     <h2 style="text-align: center;"><strong>{{details.title}}</strong></h2>
 
-    <div class="col-md-5 ">
+    <div class="col-md-6 mx-auto ">
+      <div class="card text-center">
+        <div class="card-header">
+          <h5>{{blog.title}}</h5>
+          <h5>{{blog.category}}</h5>
+      </div>
+
+      <div class="card-body">
       <div class="text-center">
         <img src="{{details.image.url}}" class="img-fluid detailimage" alt="project display">
         <br><br>
       <h2 class="text-center">Description</h2>
       <p class="text-center">{{details.content}}</p>
+      Link:</Link><a href="{{details.url}}" target="_blank"><strong> more info</strong></a>
+     
       <p>Posted By: <strong>{{details.user}}</strong></p>
       <p><strong>Posted on: {{details.posted_date}}</strong></p>
      
-      <!-- Link:</Link><a href="{{details.url}}" target="_blank"><strong> Link</strong></a>
-      </div>  -->
+      </div> 
       
     </div>
+  </div>
+</div>
+</div>
+</div>
     {% endblock%}

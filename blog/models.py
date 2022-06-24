@@ -4,6 +4,8 @@ from cloudinary.models import CloudinaryField
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
+import blog
+
 # Create your models here.
 # class category
 # class location
@@ -17,6 +19,9 @@ class Blog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projects')
     image = CloudinaryField('image')
     title = models.CharField(max_length=50)
+    description =  models.TextField(max_length=255,  null=True)
+    category=models.ForeignKey('Category',on_delete=models.CASCADE,null=True)
+    url = models.TextField(null=True)
     content=models.TextField()
     posted_date = models.DateTimeField(auto_now_add=True)
     
@@ -44,6 +49,12 @@ class Blog(models.Model):
         
         blog = Blog.objects.filter(title__icontains=search_title)
         return blog
+
+    # get images by category
+    @classmethod
+    def filter_by_category(cls, category_id):
+        blog = Blog.objects.filter(category_id=category_id)
+        return blog 
   
 
     def __str__(self):
@@ -87,3 +98,52 @@ class Profile(models.Model):
     def search_profiles(cls, search_term):
         profiles = cls.objects.filter(user__username__icontains=search_term).all()
         return profiles 
+
+class Comment(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    blog=models.ForeignKey(Blog, on_delete=models.CASCADE,null=True)
+    comment=models.CharField(max_length=255)
+    posted=models.DateTimeField(auto_now_add=True) 
+
+    @classmethod
+    def get_comments(cls):
+        comments = cls.objects.all()
+        return comments
+
+    def save_comment(self):
+        self.save()        
+
+class Likes(models.Model):
+    blog = models.ForeignKey(Blog,related_name='like_count', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.blog
+    def save_likes(self):
+        self.save()
+
+    # update like
+    def update_likes(self, name):
+        self.name = name
+        self.save()
+
+     # delete like from database
+    def delete_likes(self):
+        self.delete()
+
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    @classmethod
+    def get_all_category(cls):
+        categories = Category.objects.all()
+        return categories
+    def __str__(self):
+        return self.name
+    def save_category(self):
+        self.save()
+
+    def delete_category(self):
+        self.delete()
+
+    @classmethod
+    def update_category(cls,id,name):
+        cls.objects.filter(id = id).update(name = name)       

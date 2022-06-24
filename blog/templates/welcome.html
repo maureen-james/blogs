@@ -37,73 +37,84 @@
             <span class="carousel-control-next-icon"></span>
         </a>
     </div>
-    <div class="container-fluid" style="background-color: rgb(225, 175, 192); color: black;">
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid1">
+
+        <!-- <div class="row">
             <div class="col m12">
                 <h2 style="text-align: center; border-bottom: black solid 1px; color: white">BLOGS</h2>
-                <!-- <h2 style="text-align: center; border-bottom: black solid 1px; color: white">{{profile.neighbourhood}} BLOGS</h2> -->
             </div>
+        </div> -->
+
+        <div class="anime">
+            <div class="neon">
+            <span class="text " > CURRENT BLOGS</span>
+            <span class="gradient"></span>
+            <span class="spotlight"></span>
+          </div>
         </div>
 
-        <div class="row mt-5">
-            <!-- <h5 style="text-align: center;color:darkblue;">All</h5> -->
-            {% if blogs %}
-            {% for blog in blog %}
-            <div class="col-md-6">
-                <a href="{% url 'blogdetails' blog_id=blog.id%}" class="thumbnail">
-                    <div class="card">
-                        <div class="card-header">
-                            <p><b>{{blog.title}}</b></p>
-                        </div>
-                        <div class="card-body">
-                            <img src="{{blog.image.url}}" class="img-fluid" style="width: 100%;height: 300px;"
-                                alt="Project Display Screenshot">
-                        </div>
-                    </div>
-    
-                </a>
+        <div class="category" >
+            <div class="row">
+              {% for category in categories %}
+              <div class="col-md-3" style="background-color: #082835;">
+                <a href="{% url 'get_category' category.id %}">{{category.name}}</a>
+              </div>
+              {% endfor %}
+              <div class="col-md-3"></div>
+              <div class="col-md-3"></div>
+              <div class="col-md-3"></div>
             </div>
-            {% endfor %}
-            {%else %}
-            <p>There are no Projects to show</p>
-            {% endif %}
+          </div>
     
-            <div class="col-md-6"></div>
-    
-        </div>
-            {% for post in posts %}
+        
+            {% for blog in blogs %}
                 <div class="row">
-                    <div class="col-sm-6 mx-auto">
+                    <!-- <div class="card"></div> -->
+                    <div class="col-sm-8 mx-auto">
                         <div class="card text-center">
                             <div class="card-header">
-                                <h5>{{post.title}}</h5>
+                                <h5>{{blog.title}}</h5>
                             </div>
                             <div class="card-body">
-                              <p class="card-text">{{post.post}}</p>
-                                {% for comment in comments %}
-                                {%if post.id == comment.post.id%}
-                                <p>Comment: {{comment.comment}} ~ {{comment.user}}</p>
-                                {%endif%}
-                                {% endfor %}
-                                <form method="post" style="margin-top: 1.3em; margin-left: 2%;">
-                                    
-                                    {% csrf_token %}
-                                    {%bootstrap_form form%}
-                                    <input type="hidden" value="{{post.id}}" name="post_id" />
+                                
+                                <img src="{{blog.image.url}}" class="img-fluid"
+                                alt="Project Display Screenshot">
+                                <h2 class="text-center">Description</h2>
+                                <p class="card-text">{{blog.description}}</p>
+                                
+                                <a class="btn btn-info" href="{% url 'blogdetails' blog_id=blog.id%}" class="thumbnail">read more</a>
+                               
+                                    <a href="post/{{blog.id}}/like"><i class="fas fa-heart like_u"></i></a>
                                     <button type="submit" class="btn" style="margin-bottom: 1%; background-color: rgb(172, 24, 73); color: white;">Comment</button>
                                 </form>
                             </div>
+                            <div class="clicks">
+                                <p>{{blog.like_count.count}} Likes</strong></p>
+                           </div>
+
+                           {% for comment in comments %}
+                           {%if blog.id == comment.blog.id%}
+                           <p>Comments: {{comment.comment}} ~ {{comment.user}}</p>
+                           {%endif%}
+                           {% endfor %}
+                           <form method="post" style="margin-top: 1.3em; margin-left: 2%;">
+                               
+                               {% csrf_token %}
+                               {%bootstrap_form form%}
+                               <input type="hidden" value="{{blog.id}}" name="blog_id" />
                             <div class="card-footer text-muted">
-                                Posted by:  {{post.user}}
+                                Posted by:  {{blog.user}}
                             </div>
                         </div>
                     </div>
+                </div>
+                    <!-- <div class="col-sm-6"></div> -->
                 </div> <br>
             {% endfor %}
 
         {% block script%}
         {% endblock %}
     </div>
-    </div>
+    </div> 
+</div>
 {%endblock%}

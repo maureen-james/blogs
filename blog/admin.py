@@ -1,6 +1,9 @@
 from django.contrib import admin
+from .models import Blog, Profile,Comment,Likes,Category
 
-from .models import Blog, Profile
 # Register your models here.
 admin.site.register(Blog)
 admin.site.register(Profile)
+admin.site.register(Comment)
+admin.site.register(Likes)
+admin.site.register(Category)

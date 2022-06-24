@@ -13,24 +13,23 @@
 <div class="container">
 
   <div class="row" style="margin-top: 8%;">
-    {% if businesses %}
+    {% if blog %}
     <legend class="header" style="color: rgb(172, 24, 73); text-align: center;">Searches for {{message}} </legend>
     {% else %}
-    <legend class="header" style="color: rgb(172, 24, 73); text-align: center;">FOUND 0 BUSINESSES</legend>
+    <legend class="header" style="color: rgb(172, 24, 73); text-align: center;">FOUND 0 BLOGS</legend>
     {% endif %}
 
   </div>
   <div class="row">
-    {% for business in businesses %}
+    {% for blog in blogs %}
     <div class="row">
       <div class="col-md-2"></div>
       <div class="col-md-8">
         <div class="card" style="width: 48rem; border: rgb(172, 24, 73) solid 1px;">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Name: {{business.name}}</li>
-            <li class="list-group-item">Description: {{business.content}}</li>
-            <li class="list-group-item">Owner: {{business.user}}</li>
-            <li class="list-group-item">Email: {{business.email}}</li>
+            <li class="list-group-item">Title: {{blog.title}}</li>
+            <li class="list-group-item">Content: {{business.content}}</li>
+
           </ul>
         </div>
       </div>

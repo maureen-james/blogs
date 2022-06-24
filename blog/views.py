@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render,redirect
-from .models import Profile,Blog
-from .forms import DetailsForm,AddBlogForm
+from .models import Category, Profile,Blog,Comment,Likes
+from .forms import DetailsForm,AddBlogForm,CommentForm
 from django.http  import HttpResponse,Http404
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -14,20 +14,24 @@ from .serializer import BlogSerializer
 # Create your views here.
 def welcome(request):
     blog=Blog.objects.all()
+    current_user=request.user
+    comments = Comment.get_comments()
+    categories=Category.get_all_category()
     if request.method=='POST':
-        current_user=request.user
-        form=AddBlogForm(request.POST,request.FILES)
+
+        form=CommentForm(request.POST,request.FILES)
+       
         if form.is_valid():
-            blog=form.save(commit=False)
-            blog.user=current_user
-            blog.save()
-            messages.success(request,('blog was posted successfully!'))
+            comment = form.save(commit=False)
+            comment.user = current_user
+            comment.blog = Blog.objects.get(id=int(request.POST["blog_id"]))
+            comment.save()   
             return redirect('welcome')
     else:
-            form=AddBlogForm()
-    return render(request,'welcome.html',{'form':form,'blog':blog})
+           
+            form=CommentForm
+    return render(request,'welcome.html',{'form':form,'blogs':blog,'comments':comments, 'categories':categories})
 
-    # return render(request, 'welcome.html')
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
@@ -40,26 +44,6 @@ def profile(request):
     
     return render(request, 'profile.html', {"blog": blog,'form':form, "profile": profile})
 
-
-
-
-# @login_required(login_url='/accounts/login/')
-# def edit_profile(request):
-#     current_user = request.user
-#     if request.method == 'POST':
-#         form = DetailsForm(request.POST, request.FILES)
-#         if form.is_valid():
-#                 Profile.objects.filter(id=current_user.profile.id).update(bio=form.cleaned_data["bio"])
-#                 profile = Profile.objects.filter(id=current_user.profile.id).first()
-#                 profile.profile_pic.delete()
-#                 profile.profile_pic=form.cleaned_data["profile_pic"]
-#                 profile.save()
-#         return redirect('profile')
-
-#     else:
-#         form = DetailsForm()
-    
-#     return render(request, 'edit_profile.html',{"form": form}) 
 def edit_profile(request):
     current_user = request.user
     if request.method == 'POST':
@@ -112,7 +96,6 @@ def add_blog(request):
 @login_required(login_url='/accounts/login/')
 def blog_details(request, blog_id):
   
-  
   try:
     blog_details = Blog.objects.get(pk = blog_id)
   
@@ -125,10 +108,30 @@ def blog_details(request, blog_id):
 
 class BlogList(APIView):
     def get(self, request, format=None):
-        all_projects = Blog.objects.all()
-        serializers = BlogSerializer(all_projects, many=True)
+        all_blogs = Blog.objects.all()
+        serializers = BlogSerializer(all_blogs, many=True)
         permission_classes = (IsAdminOrReadOnly,)
         return Response(serializers.data)  
+
+def like_blog(request, blog_id):
+    blog = get_object_or_404(Blog,id = blog_id)
+    like = Likes.objects.filter(blog = blog ,user = request.user).first()
+    if like is None:
+        like = Likes()
+        like.blog = blog
+        like.user = request.user
+        like.save()
+    else:
+        like.delete()
+    return redirect('welcome')  
+
+def get_category(request,category_id):
+    blog =Blog.filter_by_category(category_id)
+    
+
+    return render (request,'category.html',{'blog':blog})
+
+
 
 
 
